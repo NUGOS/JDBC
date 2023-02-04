@@ -3,10 +3,7 @@ package ua.goit.jdbc;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,7 +20,9 @@ public class DatabaseQueryService {
         List<YoungEldestWorker> yongEldestWorker = new DatabaseQueryService().findYongEldestWorker();
         System.out.println(yongEldestWorker+"\u001B[32m");
         List<LongestProject> longestProject = new DatabaseQueryService().findLongestProject();
-        System.out.println(longestProject+"\u001B[0m");
+        System.out.println(longestProject + "\u001B[36m");
+        List<PrintProjectPrice> printProjectPrices = new DatabaseQueryService().printProjectPrice();
+        System.out.println(printProjectPrices + "\u001B[0m");
     }
 
     public List<MaxProjectCountClient> findMaxProjectsClient() throws SQLException, IOException {
@@ -106,6 +105,26 @@ public class DatabaseQueryService {
             longestProjects.add(longestProject);
         }
         return longestProjects;
+    }
+    public List<PrintProjectPrice> printProjectPrice() throws IOException, SQLException {
+        String sqlFilePath = Objects.requireNonNull(DatabaseQueryService.class
+                        .getClassLoader()
+                        .getResource("sql/print_project_prices.sql"))
+                .getPath();
+        String sql = readSQLFile(sqlFilePath);
+
+        Connection connection = database.getConnection();
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+
+        List<PrintProjectPrice> printProjectPrices = new ArrayList<>();
+        while (resultSet.next()) {
+            PrintProjectPrice printProjectPrice = new PrintProjectPrice();
+            printProjectPrice.setName(resultSet.getString("NAME"));
+            printProjectPrice.setPrice(resultSet.getInt("PRICE"));
+            printProjectPrices.add(printProjectPrice);
+        }
+        return printProjectPrices;
     }
 
     private static String readSQLFile(String filePath) throws IOException {
@@ -238,6 +257,34 @@ public class DatabaseQueryService {
             return "LongestProject{" +
                     "name='" + name + '\'' +
                     ", monthCount=" + monthCount +
+                    '}';
+        }
+    }
+    public static class PrintProjectPrice{
+        private String name;
+        private int price;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getPrice() {
+            return price;
+        }
+
+        public void setPrice(int price) {
+            this.price = price;
+        }
+
+        @Override
+        public String toString() {
+            return "PrintProjectPrices{" +
+                    "name='" + name + '\'' +
+                    ", price=" + price +
                     '}';
         }
     }
