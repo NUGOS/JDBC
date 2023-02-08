@@ -1,11 +1,12 @@
 package ua.goit.jdbc;
 
+import ua.goit.jdbc.model.*;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -13,7 +14,7 @@ public class DatabaseQueryService {
 
     private final Database database = new Database();
 
-    public List<MaxProjectCountClient> findMaxProjectsClient() throws SQLException, IOException {
+    public List<MaxProjectCountClient> findMaxProjectsClient() throws IOException {
 
         List<MaxProjectCountClient> maxProjectCountClients = new ArrayList<>();
         String sqlFilePath = Objects.requireNonNull(DatabaseQueryService.class
@@ -24,7 +25,7 @@ public class DatabaseQueryService {
         try (
                 Connection connection = database.getConnection();
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(sql);
+                ResultSet resultSet = statement.executeQuery(sql)
         ) {
             while (resultSet.next()) {
                 MaxProjectCountClient maxProjectCountClient = new MaxProjectCountClient();
@@ -39,7 +40,7 @@ public class DatabaseQueryService {
 
     }
 
-    public List<MaxSalaryWorker> findMaxSalaryWorker() throws IOException, SQLException {
+    public List<MaxSalaryWorker> findMaxSalaryWorker() throws IOException {
         List<MaxSalaryWorker> maxSalaryWorkers = new ArrayList<>();
         String sqlFilePath = Objects.requireNonNull(DatabaseQueryService.class
                         .getClassLoader()
@@ -50,7 +51,7 @@ public class DatabaseQueryService {
         try (
                 Connection connection = database.getConnection();
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(sql);
+                ResultSet resultSet = statement.executeQuery(sql)
         ) {
 
             while (resultSet.next()) {
@@ -65,7 +66,7 @@ public class DatabaseQueryService {
         return maxSalaryWorkers;
     }
 
-    public List<YoungEldestWorker> findYongEldestWorker() throws IOException, SQLException {
+    public List<YoungEldestWorker> findYongEldestWorker() throws IOException {
         List<YoungEldestWorker> youngEldestWorkers = new ArrayList<>();
         String sqlFilePath = Objects.requireNonNull(DatabaseQueryService.class
                         .getClassLoader()
@@ -76,7 +77,7 @@ public class DatabaseQueryService {
         try (
                 Connection connection = database.getConnection();
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(sql);
+                ResultSet resultSet = statement.executeQuery(sql)
         ) {
             while (resultSet.next()) {
                 YoungEldestWorker youngEldestWorker = new YoungEldestWorker();
@@ -91,7 +92,7 @@ public class DatabaseQueryService {
         return youngEldestWorkers;
     }
 
-    public List<LongestProject> findLongestProject() throws IOException, SQLException {
+    public List<LongestProject> findLongestProject() throws IOException {
         List<LongestProject> longestProjects = new ArrayList<>();
         String sqlFilePath = Objects.requireNonNull(DatabaseQueryService.class
                         .getClassLoader()
@@ -102,7 +103,7 @@ public class DatabaseQueryService {
         try (
                 Connection connection = database.getConnection();
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(sql);
+                ResultSet resultSet = statement.executeQuery(sql)
         ) {
             while (resultSet.next()) {
                 LongestProject longestProject = new LongestProject();
@@ -116,7 +117,7 @@ public class DatabaseQueryService {
         return longestProjects;
     }
 
-    public List<PrintProjectPrice> printProjectPrice() throws IOException, SQLException {
+    public List<PrintProjectPrice> printProjectPrice() throws IOException {
         List<PrintProjectPrice> printProjectPrices = new ArrayList<>();
         String sqlFilePath = Objects.requireNonNull(DatabaseQueryService.class
                         .getClassLoader()
@@ -127,7 +128,7 @@ public class DatabaseQueryService {
         try (
                 Connection connection = database.getConnection();
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(sql);
+                ResultSet resultSet = statement.executeQuery(sql)
         ) {
             while (resultSet.next()) {
                 PrintProjectPrice printProjectPrice = new PrintProjectPrice();
@@ -152,158 +153,4 @@ public class DatabaseQueryService {
         return sql.toString();
     }
 
-    public static class MaxSalaryWorker {
-        private String name;
-        private int salary;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public int getSalary() {
-            return salary;
-        }
-
-        public void setSalary(int salary) {
-            this.salary = salary;
-        }
-
-        @Override
-        public String toString() {
-            return "MaxSalaryWorker{" +
-                    "name='" + name + '\'' +
-                    ", salary=" + salary +
-                    '}';
-        }
-    }
-
-    public static class MaxProjectCountClient {
-        private String name;
-        private int projectCount;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public int getProjectCount() {
-            return projectCount;
-        }
-
-        public void setProjectCount(int projectCount) {
-            this.projectCount = projectCount;
-        }
-
-        @Override
-        public String toString() {
-            return "MaxProjectCountClient{" +
-                    "name='" + name + '\'' +
-                    ", projectCount=" + projectCount +
-                    '}';
-        }
-    }
-
-    public static class YoungEldestWorker {
-        private String type;
-        private String name;
-        private Date birthday;
-
-        public String getType() {
-            return type;
-        }
-
-        public void setType(String type) {
-            this.type = type;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public Date getBirthday() {
-            return birthday;
-        }
-
-        public void setBirthday(Date birthday) {
-            this.birthday = birthday;
-        }
-
-        @Override
-        public String toString() {
-            return "YoungEldestWorker{" +
-                    "type='" + type + '\'' +
-                    ", name='" + name + '\'' +
-                    ", birthday=" + birthday +
-                    '}';
-        }
-    }
-
-    public static class LongestProject {
-        private String name;
-        private int monthCount;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public int getMonthCount() {
-            return monthCount;
-        }
-
-        public void setMonthCount(int monthCount) {
-            this.monthCount = monthCount;
-        }
-
-        @Override
-        public String toString() {
-            return "LongestProject{" +
-                    "name='" + name + '\'' +
-                    ", monthCount=" + monthCount +
-                    '}';
-        }
-    }
-
-    public static class PrintProjectPrice {
-        private String name;
-        private int price;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public int getPrice() {
-            return price;
-        }
-
-        public void setPrice(int price) {
-            this.price = price;
-        }
-
-        @Override
-        public String toString() {
-            return "PrintProjectPrices{" +
-                    "name='" + name + '\'' +
-                    ", price=" + price +
-                    '}';
-        }
-    }
 }
